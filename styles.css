@@ -1,0 +1,802 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --night: #ffffff;
+  --navy: #141b30;
+  --indigo: #4361ee;
+  --gold: #e8a020;
+  --gold-lt: #fbbf24;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --form-bg: #ffffff;
+  --paper: #f8fafc;
+}
+
+/* links colour*/
+.social-links a {
+  color: var(--indigo);
+  text-decoration: none;
+  transition: color .2s;
+  font-size: 10px;
+}
+
+.social-links a:hover {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+/* ============= */
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--paper);
+  color: #111827;
+  /* readable dark; --night is #fff (paper-white) */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--night);
+  color: #000000;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 24px rgba(10, 15, 30, .6);
+  gap: 10px;
+}
+
+.hd-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hd-star {
+  font-size: 1.4rem;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.hd-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+
+.hd-sub {
+  font-size: .64rem;
+  color: rgb(0, 0, 0);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  display: block;
+}
+
+#btn-pdf {
+  background: var(--indigo);
+  color: #fff;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: .03em;
+  transition: background .2s, transform .1s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+#btn-pdf:hover {
+  background: #3451d1;
+  transform: translateY(-1px);
+}
+
+#btn-pdf:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── TABS (mobile) ── */
+.tab-bar {
+  display: none;
+  background: var(--night);
+  border-top: 1px solid #1e2a45;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 11px;
+  background: none;
+  border: none;
+  color: #778;
+  font-family: 'Inter', sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color .2s, border-color .2s;
+  touch-action: manipulation;
+}
+
+.tab-btn.active {
+  color: #4361ee;
+  ;
+  border-bottom-color: var(--gold);
+}
+
+/* ── WORKSPACE ── */
+.workspace {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  flex: 1;
+  /* Use min-height so very tall invoices are never clipped.
+     100dvh accounts for mobile browser chrome; falls back to 100vh. */
+  min-height: 0;
+  overflow: hidden;
+  height: calc(100vh - var(--header-h, 57px));
+}
+
+/* ── FORM PANEL ── */
+.form-panel {
+  background: var(--form-bg);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 22px 20px 50px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sec-label {
+  font-family: 'Syne', sans-serif;
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--indigo);
+  margin: 22px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.sec-label:first-child {
+  margin-top: 0;
+}
+
+.sec-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: black;
+  background: var(--paper);
+  transition: border-color .2s, box-shadow .2s;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%2364748b'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--indigo);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, .12);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 62px;
+}
+
+.form-info {
+  font-size: .75rem;
+  color: var(--muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+input.invalid,
+textarea.invalid,
+select.invalid {
+  border-color: #ef4444 !important;
+}
+
+input.invalid:focus,
+textarea.invalid:focus,
+select.invalid:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, .12) !important;
+}
+
+.error-msg {
+  color: #ef4444;
+  font-size: 0.72rem;
+  margin-top: 4px;
+  display: block;
+  font-weight: 500;
+}
+
+/* Desktop item rows */
+.item-hdr {
+  display: grid;
+  grid-template-columns: 2.4fr 1fr 1fr 1.2fr 30px;
+  gap: 6px;
+  font-size: .64rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted);
+  padding: 5px 0 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.item-row-d {
+  display: grid;
+  grid-template-columns: 2.4fr 1fr 1fr 1.2fr 30px;
+  gap: 6px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.item-row-d input {
+  font-size: 13px;
+  padding: 7px 8px;
+}
+
+/* Mobile item cards */
+#svc-mobile {
+  display: none;
+}
+
+.item-card {
+  background: var(--paper);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 14px 6px;
+  margin-bottom: 10px;
+}
+
+.icard-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.icard-num {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--indigo);
+}
+
+.icard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-rm {
+  background: none;
+  border: none;
+  color: #e53e3e;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background .15s;
+  touch-action: manipulation;
+}
+
+.btn-rm:hover {
+  background: #fff5f5;
+}
+
+.btn-add {
+  width: 100%;
+  border: 1.5px dashed var(--border);
+  background: none;
+  color: var(--indigo);
+  font-family: 'Inter', sans-serif;
+  font-size: .82rem;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  margin-top: 4px;
+  touch-action: manipulation;
+}
+
+.btn-add:hover {
+  border-color: var(--indigo);
+  background: #eef2ff;
+}
+
+/* Payment phases */
+.phase-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.phase-label {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--muted);
+  padding-top: 2px;
+}
+
+.phase-row input,
+.phase-row select {
+  font-size: 13px;
+  padding: 7px 8px;
+}
+
+/* GST grid */
+.gst-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ── PREVIEW PANEL ── */
+.preview-panel {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #dde4ef;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 28px 16px 50px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.preview-scroller {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── THE INVOICE ── */
+#inv {
+  width: 740px;
+  min-width: 740px;
+  background: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #111;
+  box-shadow: 0 10px 48px rgba(0, 0, 0, .22);
+  margin: 0 auto;
+  position: relative;
+  /*
+   * IMPORTANT: overflow must NOT be hidden.
+   * hidden clips the rendered height seen by html2canvas, producing
+   * white blank pages when many services are added.
+   * The watermark is absolutely-positioned with pointer-events:none —
+   * it does not need the parent to clip it.
+   */
+  overflow: visible;
+}
+
+.inv-watermark {
+  position: absolute;
+  top: 52%;
+  /* slightly offset downward to center in the invoice body */
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  width: 380px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+.inv-watermark img {
+  width: 100%;
+  height: auto;
+}
+
+
+/* Inv header band */
+.inv-head {
+  background: var(--night);
+  color: #000000;
+  padding: 25px;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.head1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inv-brand-name {
+  font-family: 'Georgia', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.inv-brand-tag {
+  font-size: 10px;
+  color: #000000;
+  letter-spacing: .12em;
+}
+
+.inv-brand-contact {
+  font-size: 10px;
+  color: rgb(0, 0, 0);
+  margin-top: 6px;
+  line-height: 1.7;
+}
+
+
+/* Bill-to band */
+.inv-billto {
+  background: #4362ee13;
+  padding: 14px 28px;
+  border-bottom: 2px solid var(--indigo);
+  border: 1px solid #4361ee;
+  margin: 25px;
+  border-radius: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.inv-billto-cols {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.inv-billto-left {
+  flex: 1;
+}
+
+.inv-billto-right {
+  width: 110px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(67, 97, 238, 0.15);
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pay-btn-link {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 5px 12px;
+  background-color: var(--indigo);
+  color: white !important;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.pay-btn-link:hover {
+  background-color: #3451d1;
+  transform: translateY(-1px);
+}
+
+.inv-billto-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin-bottom: 5px;
+}
+
+.inv-billto-detail {
+  font-size: 11px;
+  color: #000000;
+  display: block;
+  margin: 0;
+  padding: 3px 0;
+  line-height: 1.4;
+}
+
+.inv-billto-detail .label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+.inv-billto-detail .sep {
+  display: inline-block;
+  margin: 0 4px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.inv-billto-detail .value {
+  display: inline;
+  font-size: 13px;
+  font-weight: 900;
+  color: #000;
+}
+
+.inv-billto-detail .value--upper {
+  text-transform: uppercase;
+}
+
+
+/* Invoice body */
+.inv-body {
+  padding: 0 28px 28px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Tables */
+.inv-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  margin: 16px 0 4px;
+}
+
+.inv-tbl th {
+  background: var(--navy);
+  color: #fff;
+  padding: 7px 8px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.inv-tbl th.r {
+  text-align: right;
+}
+
+.inv-tbl td {
+  padding: 7px 8px;
+  border-bottom: 1px solid #e8edf5;
+  vertical-align: top;
+}
+
+.inv-tbl td.r {
+  text-align: right;
+}
+
+.inv-tbl td.c {
+  text-align: center;
+}
+
+.inv-tbl tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.inv-tbl tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.inv-svc-name {
+  font-weight: 600;
+  color: black;
+}
+
+.inv-svc-desc {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Summary block */
+.inv-summary {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.inv-sum-tbl {
+  width: 280px;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+
+.inv-sum-tbl td {
+  padding: 5px 10px;
+  border: 1px solid #dde3ef;
+}
+
+.inv-sum-tbl .sum-label {
+  color: var(--muted);
+}
+
+.inv-sum-tbl .sum-net {
+  background: var(--night);
+  color: #000000;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.inv-words {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-style: italic;
+  color: #7c5c0f;
+  margin-top: 12px;
+}
+
+/* Payment phases table */
+.inv-sec-hdr {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin: 18px 0 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.phase-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.phase-tbl th {
+  background: #f1f5ff;
+  color: var(--navy);
+  padding: 7px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border: 1px solid #d4ddf5;
+}
+
+.phase-tbl td {
+  padding: 7px 10px;
+  border: 1px solid #d4ddf5;
+  vertical-align: middle;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+
+.badge-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-received {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-partial {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+/* Terms */
+.inv-terms {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-size: 10.5px;
+  color: #444;
+  line-height: 1.8;
+  margin-top: 10px;
+}
+
+.inv-terms ul {
+  padding-left: 16px;
+  margin: 0;
+}
+
+.inv-terms ul li {
+  margin-bottom: 3px;
+}
+
+/* Signatures */
+.inv-sigs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.inv-sig-box {
+  padding-top: 8px;
+  font-size: 11px;
+}
+
+.inv-sig-box.right {
+  text-align: right;
+}
+
+/* ── HIDDEN ── */
+.hidden {
+  display: none !important;
+}
+
+
+/* ── RESPONSIVE rules moved to mobile-responsive.css ── */

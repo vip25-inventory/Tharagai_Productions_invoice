@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Tharagai Production — Professional GST Invoice Generator">
+  <title>Tharagai Production — Invoice Generator</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="mobile-responsive.css">
+  <style>
+    /* Measure real header height and expose as --header-h so the
+       workspace height calc() is always pixel-accurate. */
+    :root {
+      --header-h: 57px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="hd-brand">
+      <span><img src="image001.jpg" style="width: 50px; height: auto;" alt=""></span>
+      <div>
+        <div class="hd-title">Tharagai Production</div>
+        <span class="hd-sub">Invoice Generator</span>
+      </div>
+    </div>
+    <button id="btn-pdf" onclick="genPDF()" title="Opens print dialog — select 'Save as PDF' then press Save">⬇ Save as
+      PDF</button>
+  </header>
+
+  <nav class="tab-bar" id="tab-bar">
+    <button class="tab-btn active" id="tab-form" onclick="switchTab('form')">✏️ Fill Form</button>
+    <button class="tab-btn" id="tab-prev" onclick="switchTab('preview')">👁 Preview</button>
+  </nav>
+
+  <div class="workspace">
+
+    <!-- ════ FORM PANEL ════ -->
+    <div class="form-panel" id="panel-form">
+
+      <div class="sec-label">Client Details</div>
+      <div class="form-group"><label>Client / Company Name</label><input type="text" id="f-cname"
+          placeholder="e.g. Karthik Enterprises" oninput="sync()"></div>
+      <div class="form-group"><label>Mobile No</label><input type="tel" id="f-cmobile" placeholder="9XXXXXXXXX"
+          oninput="sync()"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="f-cemail" placeholder="client@email.com"
+          oninput="sync()"></div>
+      <div class="form-group"><label>Address</label><textarea id="f-caddr" placeholder="Door No, Street, City"
+          oninput="sync()"></textarea></div>
+      <div class="form-group"><label>GSTIN</label><input type="text" id="f-cgstin" placeholder="GSTIN"
+          oninput="this.value = this.value.toUpperCase(); sync()">
+      </div>
+      <div class="form-group"><label>QR Payment Amount (₹)</label><input type="number" id="f-upiamt" placeholder="e.g. 500" oninput="sync()"></div>
+
+      <div class="sec-label">Invoice Details</div>
+      <div class="form-row">
+        <div class="form-group"><label>Invoice No</label><input type="text" id="f-invno" placeholder="TP-2026-001"
+            oninput="sync()"></div>
+        <div class="form-group"><label>Invoice Date</label><input type="date" id="f-invdate" oninput="sync()"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Due Date</label><input type="date" id="f-duedate" oninput="sync()"></div>
+        <div class="form-group"><label>Project Title</label><input type="text" id="f-project"
+            placeholder="e.g. Brand Video" oninput="sync()"></div>
+      </div>
+
+      <div class="sec-label">Services</div>
+      <div class="item-hdr"><span>Service</span><span>Qty/Hrs</span><span>Rate (₹)</span><span></span></div>
+      <div id="svc-desktop"></div>
+      <div id="svc-mobile"></div>
+      <button class="btn-add" onclick="addSvc()">+ Add Service</button>
+
+      <div class="sec-label" style="margin-top:20px">GST Details</div>
+      <div class="gst-grid">
+        <div class="form-group"><label>CGST %</label><input type="number" id="f-cgst" value="9" min="0" max="14"
+            step="0.5" oninput="sync()"></div>
+        <div class="form-group"><label>SGST %</label><input type="number" id="f-sgst" value="9" min="0" max="14"
+            step="0.5" oninput="sync()"></div>
+        <div class="form-group"><label>GST Type</label><select id="f-gsttype" onchange="sync()">
+            <option value="cgst_sgst">CGST + SGST</option>
+            <option value="igst">IGST</option>
+          </select></div>
+        <div class="form-group"><label>Tax Slab</label><select id="f-slab" onchange="sync()">
+            <option value="5">5%</option>
+            <option value="12">12%</option>
+            <option value="18" selected>18%</option>
+            <option value="28">28%</option>
+          </select></div>
+      </div>
+
+      <div class="sec-label">Payment Schedule</div>
+      <p class="form-info" style="margin-bottom:12px;">Track up to 3 payment phases</p>
+
+      <div id="phases-form"></div>
+
+      <div class="sec-label" style="margin-top:20px">Terms &amp; Conditions</div>
+      <div class="form-group">
+        <label>Edit T&amp;C (one per line)</label>
+        <textarea id="f-terms" rows="6" oninput="sync()">Customer will be billed after indicating acceptance of this invoice.
+The quotation includes only the services listed.
+Work will begin only after 60% advance payment is received.
+All payments are non-refundable once work has commenced.
+Final deliverables will be shared upon receipt of full payment.</textarea>
+      </div>
+
+      <!-- Hidden stub inputs so sync() never throws on missing IDs.
+           These fields are not shown in the UI (business details are
+           hard-coded in the invoice letterhead) but sync() reads them
+           safely and they return empty strings. -->
+      <input type="hidden" id="f-gstin" value="">
+      <input type="hidden" id="f-phone" value="">
+      <input type="hidden" id="f-addr" value="">
+      <input type="hidden" id="f-web" value="">
+
+    </div><!-- /form-panel -->
+
+    <!-- ════ PREVIEW PANEL ════ -->
+    <div class="preview-panel hidden" id="panel-preview">
+      <div class="preview-scroller">
+        <div id="inv">
+          <div class="inv-watermark"><img src="image001.jpg" alt="watermark"></div>
+
+          <!-- Letterhead band -->
+          <div class="inv-head" style=" border-bottom: 1px solid #000000;display: block;">
+            <div class="head1">
+
+
+              <div><img src="image001.jpg" style="width: 70px; height: auto;" alt=""></div>
+
+
+              <div class="inv-brand-name"><strong>THARAGAI PRODUCTION</strong></div>
+
+
+              <div class="inv-meta-block" style="font-size: 13px; font-weight: 700; text-align: end;">
+                <div class="inv-label">Tax Invoice </div>
+                <div class="inv-no" id="p-invno">#TP-2026-001</div>
+                <div class="inv-dates" id="p-dates">&nbsp;</div>
+              </div>
+            </div>
+
+
+
+
+          </div>
+
+          <!-- Bill To -->
+          <div class="inv-billto">
+            <div class="inv-billto-cols">
+              <div class="inv-billto-left">
+                <div class="inv-billto-label">Client Info</div>
+                <div id="p-cdetail">&nbsp;</div>
+              </div>
+              <div class="inv-billto-right" id="p-qr-container" style="display: none;">
+                <div class="inv-billto-label" style="text-align: center; margin-bottom: 2px;">Scan to Pay</div>
+                <div style="text-align: center;">
+                  <a id="p-qr-link" href="" target="_blank" style="text-decoration: none; display: block;">
+                    <img id="p-qr-img" src="" alt="UPI QR Code" style="width: 80px; height: 80px; display: block; margin: 0 auto;">
+                    <span class="pay-btn-link">Pay Now</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="inv-body">
+
+            <!-- Project ref -->
+            <div style="margin-top:12px;font-size:11px;color:var(--muted);">
+              Project Ref: <strong id="p-project" style="color:var(--night);">—</strong>
+            </div>
+
+            <!-- Services table -->
+            <table class="inv-tbl" id="p-svc-tbl">
+              <thead>
+                <tr>
+                  <th style="width:5%;">#</th>
+                  <th style="width:35%;">Service Description</th>
+                  <!-- <th style="width:11%;">SAC</th> -->
+                  <th class="r" style="width:9%;">Hrs</th>
+                  <th class="r" style="width:12%;">Rate</th>
+                  <th class="r" style="width:8%;">CGST</th>
+                  <th class="r" style="width:8%;">SGST</th>
+                  <th class="r" style="width:12%;">Total</th>
+                </tr>
+              </thead>
+              <tbody id="p-svc-body">
+                <tr>
+                  <td colspan="8" style="text-align:center;color:#aaa;padding:18px;">No services added yet</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Totals -->
+            <div class="inv-summary">
+              <table class="inv-sum-tbl">
+                <tr>
+                  <td class="sum-label">Subtotal</td>
+                  <td class="r">₹<span id="p-sub">0.00</span></td>
+                </tr>
+                <tr>
+                  <td class="sum-label">CGST</td>
+                  <td class="r">₹<span id="p-cgst-amt">0.00</span></td>
+                </tr>
+                <tr>
+                  <td class="sum-label">SGST</td>
+                  <td class="r">₹<span id="p-sgst-amt">0.00</span></td>
+                </tr>
+                <tr>
+                  <td class="sum-label">Paise Rounded</td>
+                  <td class="r"><span id="p-paise">—</span></td>
+                </tr>
+                <tr class="sum-net">
+                  <td>Net Amount</td>
+                  <td class="r">₹<span id="p-net">0.00</span></td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="inv-words">Amount in Words: <span id="p-words">—</span></div>
+
+            <!-- Payment Schedule -->
+            <div class="inv-sec-hdr">Payment Schedule</div>
+            <table class="phase-tbl">
+              <thead>
+                <tr>
+                  <th>Phase</th>
+                  <th>Date</th>
+                  <th>Mode</th>
+                  <th>Amount (₹)</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="p-phase-body">
+                <tr>
+                  <td colspan="5" style="text-align:center;color:#aaa;padding:12px;">No phases set</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Terms -->
+            <div class="inv-sec-hdr">Terms &amp; Conditions</div>
+            <div class="inv-terms">
+              <ul id="p-terms-list"></ul>
+            </div>
+
+            <!-- Signatures -->
+            <div class="inv-sigs">
+              <div class="inv-sig-box"><br><br>Client's Signature</div>
+              <div class="inv-sig-box right"><br><br>Authorized Signature<br><small style="color:var(--muted);">Tharagai
+                  Production</small></div>
+            </div>
+            <br>
+            <hr style=" border-bottom: 1px solid #000000;display: block;">
+            <div class="social-links"
+              style="display: flex; justify-content: space-around;margin-top: 10px;padding: 0px 10px; align-items:center; text-align: center;;">
+              <div class="inv-brand-tag"><B>Website <br> <a href="https://tharagaiproductions.com/"
+                    target="_blank">www.tharagaiproductions.com</a></B></div>
+              <div class="inv-brand-tag"><B>Email <br> <a href="mailto:hello@tharagaiproductions.com"
+                    target="_blank">hello@tharagaiproductions.com</a></B></div>
+              <div class="inv-brand-tag"><B>Mobile <br><a href="tel:+919363754528">+91 93637
+                    54528</a><br>
+                  <a href="tel:+918754783110">+91 87547 83110</a>
+                </B></div>
+            </div>
+
+          </div><!-- /inv-body -->
+
+        </div><!-- /inv -->
+      </div><!-- /preview-scroller -->
+    </div><!-- /preview-panel -->
+
+  </div><!-- /workspace -->
+
+  <script src="Script.js"></script>
+  <script>
+    /* Expose real header height as a CSS variable so the workspace
+       height calc() is always pixel-accurate even after font scaling. */
+    function setHeaderHeight() {
+      var h = document.querySelector('header');
+      if (h) document.documentElement.style.setProperty('--header-h', h.offsetHeight + 'px');
+    }
+    window.addEventListener('load', setHeaderHeight);
+    window.addEventListener('resize', setHeaderHeight);
+  </script>
+</body>
+
+</html>
