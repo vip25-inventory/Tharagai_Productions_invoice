@@ -524,8 +524,16 @@
     display: flex !important;
     flex-direction: column !important;
     min-height: calc(228.46mm - 0.3in) !important;
-    height: calc(228.46mm - 0.3in) !important;
+    height: auto !important;
+    /* Allow height to grow dynamically if content exceeds one page */
     box-sizing: border-box !important;
+  }
+
+  /* ── Footer Container ── */
+  .inv-footer-container {
+    margin-top: auto !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   /* ── Header band ── */
@@ -730,9 +738,17 @@
     margin-bottom: 1px !important;
   }
 
+  .inv-footer-container {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    margin-bottom: 10px !important;
+  }
+
   /* ── Signatures ── */
   .inv-sigs {
-    margin-top: auto !important;
+    margin-top: 10px !important;
     gap: 10px !important;
   }
 
@@ -752,15 +768,10 @@
   .phase-tbl,
   .inv-sec-hdr,
   .inv-tbl,
-  .inv-tbl tbody {
+  .inv-tbl tbody,
+  .inv-footer-container {
     page-break-inside: avoid;
     break-inside: avoid;
-  }
-
-  /* Prevent any element from forcing a new page */
-  * {
-    page-break-before: avoid !important;
-    break-before: avoid !important;
   }
 
   /* ── Watermark: keep it visible in print ── */
