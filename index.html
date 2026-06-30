@@ -57,7 +57,8 @@
       <div class="form-group"><label>GSTIN</label><input type="text" id="f-cgstin" placeholder="GSTIN"
           oninput="this.value = this.value.toUpperCase(); sync()">
       </div>
-      <div class="form-group"><label>QR Payment Amount (₹)</label><input type="number" id="f-upiamt" placeholder="e.g. 500" oninput="sync()"></div>
+      <div class="form-group"><label>QR Payment Amount (₹)</label><input type="number" id="f-upiamt"
+          placeholder="e.g. 500" oninput="sync()"></div>
 
       <div class="sec-label">Invoice Details</div>
       <div class="form-row">
@@ -161,7 +162,8 @@ Final deliverables will be shared upon receipt of full payment.</textarea>
                 <div class="inv-billto-label" style="text-align: center; margin-bottom: 2px;">Scan to Pay</div>
                 <div style="text-align: center;">
                   <a id="p-qr-link" href="" target="_blank" style="text-decoration: none; display: block;">
-                    <img id="p-qr-img" src="" alt="UPI QR Code" style="width: 80px; height: 80px; display: block; margin: 0 auto;">
+                    <img id="p-qr-img" src="" alt="UPI QR Code"
+                      style="width: 80px; height: 80px; display: block; margin: 0 auto;">
                     <span class="pay-btn-link">Pay Now</span>
                   </a>
                 </div>
@@ -254,9 +256,10 @@ Final deliverables will be shared upon receipt of full payment.</textarea>
             <!-- Footer container to keep signature and social links together and pushed to bottom -->
             <div class="inv-footer-container">
               <!-- Signatures -->
-              <div class="inv-sigs">
+              <div class="inv-sigs" style="padding: 0 50px 10px 50px;">
                 <div class="inv-sig-box"><br><br>Client's Signature</div>
-                <div class="inv-sig-box right"><br><br>Authorized Signature<br><small style="color:var(--muted);">Tharagai
+                <div class="inv-sig-box right"><br><br>Authorized Signature<br><small
+                    style="color:var(--muted);">Tharagai
                     Production</small></div>
               </div>
               <br>
@@ -268,7 +271,7 @@ Final deliverables will be shared upon receipt of full payment.</textarea>
                 <div class="inv-brand-tag"><B>Email <br> <a href="mailto:hello@tharagaiproductions.com"
                       target="_blank">hello@tharagaiproductions.com</a></B></div>
                 <div class="inv-brand-tag"><B>Mobile <br><a href="tel:+919363754528">+91 93637
-                      54528</a><br>
+                      54528</a><span>,</span>
                     <a href="tel:+918754783110">+91 87547 83110</a>
                   </B></div>
               </div>
